@@ -1,0 +1,50 @@
+name: Run fal scripts
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v2
+        with:
+          python-version: "3.8.x"
+
+      - name: Install dependencies
+        run: |
+          pip install --upgrade --upgrade-strategy eager -r requirements.txt
+
+      - uses: fal-ai/fal_dbt_cloud_action@v1
+        id: dbt_cloud_run
+        with:
+          dbt_cloud_token: ${{ secrets.DBT_CLOUD_API_TOKEN }}
+          dbt_cloud_account_id: ${{ secrets.DBT_ACCOUNT_ID }}
+          dbt_cloud_job_id: 51360
+          cause: 'Tiggered by fal dbt action'
+          interval: 30
+
+      - name: Checkout dbt run commit
+        run: |
+          git -c advice.detachedHead=false checkout ${{ steps.dbt_cloud_run.outputs.git_sha }}
+
+      - name: Setup dbt profile
+        uses: fal-ai/build_dbt_profile@main
+        with:
+          keyfile: ${{ secrets.SERVICE_ACCOUNT_KEY }}
+          project: ${{ secrets.BQ_PROJECT }}
+          dataset_name: ${{ secrets.BQ_DATASET }}
+
+      - name: Run fal scripts
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+          SLACK_BOT_CHANNEL: ${{ secrets.SLACK_BOT_CHANNEL }}
+        run: |
+          fal run --profiles-dir .
+
+      # Clean up
+      - uses: actions/checkout@v2
