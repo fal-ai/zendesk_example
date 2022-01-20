@@ -16,4 +16,4 @@ models:
       owner: "@meder"
       fal:
         scripts:
-          - fal_scripts/zendesk_sentiment_analysis.py
+          - fal_scripts/slack.py
