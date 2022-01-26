@@ -19,25 +19,13 @@ jobs:
         run: |
           pip install --upgrade --upgrade-strategy eager -r requirements.txt
 
-      - uses: fal-ai/fal_dbt_cloud_action@v1
+      - uses: fal-ai/dbt-cloud@main
         id: dbt_cloud_run
         with:
           dbt_cloud_token: ${{ secrets.DBT_CLOUD_API_TOKEN }}
           dbt_cloud_account_id: ${{ secrets.DBT_ACCOUNT_ID }}
           dbt_cloud_job_id: 51360
-          cause: 'Tiggered by fal dbt action'
-          interval: 30
-
-      - name: Checkout dbt run commit
-        run: |
-          git -c advice.detachedHead=false checkout ${{ steps.dbt_cloud_run.outputs.git_sha }}
-
-      - name: Setup dbt profile
-        uses: fal-ai/build_dbt_profile@main
-        with:
-          keyfile: ${{ secrets.SERVICE_ACCOUNT_KEY }}
-          project: ${{ secrets.BQ_PROJECT }}
-          dataset_name: ${{ secrets.BQ_DATASET }}
+          dbt_profiles: ${{ secrets.PROFILES_YML }}
 
       - name: Run fal scripts
         env:
