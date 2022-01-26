@@ -19,7 +19,7 @@ jobs:
         run: |
           pip install --upgrade --upgrade-strategy eager -r requirements.txt
 
-      - uses: fal-ai/dbt-cloud@main
+      - uses: fal-ai/dbt-cloud-action@main
         id: dbt_cloud_run
         with:
           dbt_cloud_token: ${{ secrets.DBT_CLOUD_API_TOKEN }}
