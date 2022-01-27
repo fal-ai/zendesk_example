@@ -31,6 +31,8 @@ jobs:
         env:
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
           SLACK_BOT_CHANNEL: ${{ secrets.SLACK_BOT_CHANNEL }}
+          DBT_GCLOUD_PROJECT: ${{ secrets.DBT_GCLOUD_PROJECT }}
+          DBT_BQ_DATASET: ${{ secrets.DBT_BQ_DATASET }}
         run: |
           fal run --profiles-dir .
 
