@@ -24,7 +24,7 @@ jobs:
         with:
           dbt_cloud_token: ${{ secrets.DBT_CLOUD_API_TOKEN }}
           dbt_cloud_account_id: ${{ secrets.DBT_ACCOUNT_ID }}
-          dbt_cloud_job_id: 51360
+          dbt_cloud_job_id: 54732
           dbt_profiles: ${{ secrets.PROFILES_YML }}
 
       - name: Run fal scripts
