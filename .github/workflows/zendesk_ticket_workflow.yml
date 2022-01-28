@@ -25,7 +25,6 @@ jobs:
           dbt_cloud_token: ${{ secrets.DBT_CLOUD_API_TOKEN }}
           dbt_cloud_account_id: ${{ secrets.DBT_ACCOUNT_ID }}
           dbt_cloud_job_id: 54732
-          dbt_profiles: ${{ secrets.PROFILES_YML }}
 
       - name: Run fal scripts
         env:
@@ -33,7 +32,9 @@ jobs:
           SLACK_BOT_CHANNEL: ${{ secrets.SLACK_BOT_CHANNEL }}
           DBT_GCLOUD_PROJECT: ${{ secrets.DBT_GCLOUD_PROJECT }}
           DBT_BQ_DATASET: ${{ secrets.DBT_BQ_DATASET }}
+          PROFILES_YML: ${{ secrets.PROFILES_YML }}
         run: |
+          echo "$PROFILES_YML" >> profiles.yml
           fal run --profiles-dir .
 
       # Clean up
